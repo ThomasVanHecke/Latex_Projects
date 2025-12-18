@@ -1,0 +1,18 @@
+OS2:LAB3:VERSLAG
+
+Introduction:
+...
+
+Body:
+
+
+Conclusion:
+...
+
+Should contain:
+-Steps
+-Alternatives
+-MyAllocatorImpl
+-Optimizes for?
+-Direct&indirect overhead
+-Benchmarks

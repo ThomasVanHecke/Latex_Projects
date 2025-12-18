@@ -1,0 +1,260 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\title{Systeem En Netwerkbeer}
+\author{Thomas Van Hecke}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Inleiding}
+Stel er bestaat een koekjes bedrijf en elk kwartaal wil dat bedrijf verkoopsresultaten opslaan en vergelijken met vorige kwartalen.
+De IT dienst stelt voor om een computer aan te schaffen die deze resultaten kan opslaan en verwerken.
+Het bedrijf is nog in volle ontwikkeling en hebben het geld niet om dure hardware infrastructuur aan te kopen.
+Los daarvan heeft de IT dienst niet veel kennis van welke hardware ze moeten aankopen om deze computer te bouwen.
+Hoe kan er nu een computer aangeschaft worden zonder de grote instapskost voor alle hardware?
+Om dit probleem op te lossen kan de cloud gebruikt worden.
+\subsection{Cloud}
+De cloud is een verzameling van computermiddelen.
+Enerzijds wordt er opslagruimte aangeboden zoals OneDrive van Microsoft, anderzijds worden er ook diensten aangeboden zoals extra rekenkracht en databases.
+Om deze computermiddelen aan te vragen bestaat er een online platform zoals het Google Cloud Platform \ref{fig:GoogleCloudPlatform}.
+\begin{figure}[h!]
+    \includegraphics[width=\linewidth]{Images/GoogleCloudPlatform.png}
+    \caption{Google Cloud Platform}
+    \label{fig:GoogleCloudPlatform}
+\end{figure}
+
+\subsection{Diensten}
+Computers in de cloud worden virtuele machines genoemd omdat deze machines in de realiteit niet echt bestaan maar geëmuleerd worden in software d.m.v. een hypervisor.
+Een hypervisor is een besturingssyteem dat virtuele machines beheert.
+Zoals op de ontvangstpagina in \ref{fig:GoogleCloudPlatform} te zien is, kan er een virtuele machine worden aangemaakt met de (create a VM)-knop.
+
+\section{Voorbeeld}
+\subsection{Compute Engine API}
+Om bekend te geraken met het aanvragen van een VM, wordt de tutorial doorlopen die het platform aanbiedt.
+Om via het platform middelen aan te vragen, uit te lezen, bij te werken of te verwijderen moet de Compute Engine API geactiveerd worden.
+Deze API laat toe dat het platform geldige API calls maakt naar de enpoints.
+Wanneer alle VM's ook wel instances (entiteiten) genoemd moeten opgelijst worden zal het platform een API methode zoals: compute.v1.instances.aggregatedList gebruiken.
+Deze methode maakt onderliggend een HTTP GET request naar \url{https://compute.googleapis.com/compute/v1/projects/{project}/aggregated/instances}.
+Dit is maar één method, in realiteit worden een tientallen gemaakt.
+
+\begin{figure}[h!]
+    \includegraphics[width=\linewidth]{Images/ComputeEngineApiBarChart.png}
+    \caption{Compute Engine API Bar Chart}
+    \label{fig:ComputeEngineApiBarChart}
+\end{figure}
+
+Elke kleur in \ref{fig:ComputeEngineApiBarChart} stelt een andere methode voor.
+
+\subsection{Machine Configuratie}
+Om een VM gestructureed op te bouwen biedt het Google Cloud Platform verschillende secties.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\linewidth]{Images/VmSections.png}
+    \caption{VM Different Sections}
+    \label{fig:VmSections}
+\end{figure}
+
+De eerste sectie is de configuratie \ref{fig:VmSections} van de machine.
+Deze sectie omvat:
+
+\begin{enumerate}
+    \item Een naam geven aan de VM
+    \item Een regio kiezen voor de resources
+    \item Een zone in de gekozen regio kiezen
+    \item Een machine series kiezen
+    \item Een machine type kiezen
+    \item Een provisie model kiezen
+\end{enumerate}
+
+De regio is een individuele geografische plaats waar de resources plaatsvinden bv. europa-west1.
+Een regio bestaat uit verschillende zones zoals bv. europa-west1-a.
+Sommige resources zijn zone specifiek zoals compute engine instances (bv. VM) andere resources zijn regio specifiek bv. statische externe IP adressen.
+Een zone bepaalt dus welke computing resources er ter beschikking zijn en waar de data opgeslaan wordt.
+Om redundancy op te bouwen kan het dus interesant zijn om meerdere VM's te verspreiden over verschillende regio's en zones.
+Om latency te verminderen kan het interessant zijn om de primaire regio (belangrijkste regio) zo dicht mogelijk bij doelgroep te plaatsen.
+In het voorbeeld van het koekjes bedrijf kan het dus interessant zijn om twee VM's aan te maken in twee verschillende regio's en om deze regio's geografische zo dicht mogelijk te kiezen bij het bedrijf.
+Een machine series zijn machine types met gelijkaardige CPU en geheugen mogelijkheden. Er bestaan verschillende groepen van series bv. deze voor algemeen gebruik. 
+Elke series biedt een bereik met virtuele CPU's (vCPU's) en een bereik van geheugen die beschikbaar is binnen die series.
+Elke series is bedoeld voor een bepaald gebruik enerzijds zijn er series bedoeld voor een gebalanceerde prijs en performantie anderzijds zijn er die bedoeld zijn voor continue performantie.
+Voor het koekjes bedrijf kan het dus interessant zijn om voor algemene series bv. een N-series te kiezen die een balans aanbiedt tussen kost en performantie.
+Een bepaalde series biedt verschillende voorgemaakte types aan, elk met een aantal vCPU's en geheugen. Een type kan ook zelf samengesteld worden.
+Een provisie model wanneer de virtuele machine moet stoppen met draaien.
+
+\subsection{Besturingssyteem \& Opslag}
+Deze sectie omvat:
+
+\begin{enumerate}
+    \item De keuze van het besturingssyteem
+    \item De versie van het gekozen besturingssyteem
+    \item De keuze van de boot disk type
+    \item De keuze van de opslaggrootte
+\end{enumerate}
+
+Tot op heden bestaan er drie veel gebruikte besturingssyteem elk met hun voor- en nadelen.
+Deze drie zijn Windows OS, Mac OS en alle Linux gebaseerde OS'es.
+Voor de keuze van het besturingssysteem heeft de tutorial gekozen voor Ubuntu 24.04 LTS, dit is een linux gebaseerd OS.
+Elk besturingssyteem heeft verschillende versies, nieuwere versies zijn bedoeld om problemen van oudere versies op te lossen.
+Een boot disk type is het type van het opslag medium waarop het besturingssyteem staat van de virtuele machine.
+Tijdens het doorlopen van de tutorial kan je kiezen uit vier boot disk types: balanced persistent disk, extreme persistent disk, SSD persistent disk en standard persistent disk.
+Een persistent disk type is network storage device, dit is geen fysiek storage medium dat verbonden is met host waarop de instance draait.
+Elk type gebruikt een Solid State Drive (SSD) als opslag type, uitgezonderd het standard persistent type wat een Hard Disk Drive (HDD) gebruikt.
+SSD's en HDD's hebben beide hun voor- en nadelen. In het algemeen is een SSD beter voor performantie en een HDD beter voor kostenreductie.
+In het voorbeeld van het koekjes bedrijf zou een SSD persistent disk geschikt zijn omdat het een goede balans levert tussen performantie en kost.
+Een opslag medium heeft ook een bepaalde grootte bv. 512 GB. In de cloud worden VM's aangemaakt met cloud image's die geschreven worden naar de boot disk van die VM.
+Volgens de \href{https://documentation.ubuntu.com/server/reference/installation/system-requirements/index.html}{officiële Ubuntu website} is er een minimum van 4 GB nodig voor cloud images, maar het minimum op het platform is 10 GB.
+Voor het doorlopen van de tutorial is 10 GB voldoende.
+Om een besturingssyteem te kiezen is het ook mogelijk om een zelfgemaakt images, snapshots of bestaande disks te gebruiken.
+
+\subsection{Data bescherming}
+Deze sectie omvat:
+
+\begin{enumerate}
+    \item De keuze van het type backup
+    \item De keuze van het type replicatie
+\end{enumerate}
+
+Om de data van de VM te beschermen biedt Google drie types backups: een backup plan, snapshot schedules en no backups. 
+Een backup plan kopieert de data van de volledige VM, dit kan meerdere disks omvatten. 
+Een snapshot kopieert de data van één enkele disk.
+Naast backups biedt Google ook drie types van replicatie aan: synchrone replicatie, asynchrone replicatie en excludeer boot disk van data replicatie.
+Synchrone replicatie houdt in dat er één regio boot disk bestaat die wordt gerepliceerd naar twee zones. 
+Asynchrone replicatie houdt in dat data van één regio disk gekopieerd wordt naar een andere regio disk.
+Het excluderen van boot disk data replicatie houdt in dat enkel data gerepliceerd wordt van non-boot disks. Dit zijn disks waarop geen besturingssyteem staat.
+In het voorbeeld van het koekjes bedrijf zou het interessant zijn twee disks te gebruiken. Enerzijds een boot disk anderzijds een disk bedoeld om data op te slaan.
+Op die manier kan de boot disk al geëxludeerd worden voor data replicatie en dan hangt het af van hoe belangrijk de data is.
+
+\subsection{Netwerkbeer}
+Deze sectie omvat:
+
+\begin{enumerate}
+    \item Het instellen van de firewall
+    \item Het kiezen van een netwerk tag
+    \item Het kiezen van een hostname
+    \item Het toestaan van IP forwarding
+    \item Het toestaan van een verhoogde bandbreedte
+    \item Het kiezen van de netwerk interfaces
+\end{enumerate}
+
+De firewall bepaalt welk type inkomend netwerkverkeer toegelaten wordt en welke geweigerd wordt. 
+Het platform biedt drie mogelijkheden: HTTP verkeer toelaten, HTTPS verkeer toelaten en load balancer health checks.
+Om de tutorial te volgen selecteer je enkel HTTP verkeer toelaten.
+Een netwerk tag is een string (naam) die een VM toegewezen krijgt, daarna is het mogelijk om firewall regels op te leggen op een tag.
+Elke VM met een tag krijgt dan de firewall regels van die tag. 
+Dit kan interessant zijn om repetitieve taken te vermijden en grotere groepen VM's te beheren.
+Een hostname is fully qualified DNS naam die je aan de VM kan geven. 
+Een fully qualified DNS naam bestaat uit minimum twee labels die geconcatineerd zijn met puntjes bv. bedrijf.koekjes is een FQDNS naam.
+Zelfgekozen hostname's kunnen handig zijn om conventie's aan te houden of indien er applicaties een specifieke hostname verwachten.
+In beide gevallen (wel/geen hostname) zal Google Cloud automatisch een interne DNS naam genereren voor de VM alsook een interne DNS A record.
+Om een bruikbare hostname aan te maken moet er zelf nog een interne DNS record aangemaakt worden voor de correcte zone, dit kan met Cloud DNS.
+IP forwarding is het process waarbij een device netwerk pakketjes op één interface ontvangt en op een andere interface plaatst richting de bestemming van dat pakketje. 
+Een voorbeeld van zo'n device is een router. 
+Een verhoogde bandbreedte zorgt voor een verhoogde throughput wat voor een snellere communicatie zorgt.
+De meeste huishoudens hebben een bandbreedte van 150 Mbps downlink and 30 Mbps uplink. 
+De compute engine verhoogde bandwidth biedt een maximum uplink (outbound) van 2 Gbps, de downlink is niet gespecifieerd maar is meestal hoger dan de uplink.
+Deze asymmetrie komt vaak voor omdat over het algemeen meer data gedownload wordt dan geüpload.
+Een netwerk interface is de verbinding tussen een device en een netwerk. 
+Deze interfaces kunnen in hardware geïmplementeerd zijn zoals Netwerk Interface Cards (NIC's) of in software. 
+Indien deze interfaces in software zijn geïmplementeerd wordt ook wel van Virtuele Netwerk Interfaces gesproken.
+Een VM kan meerder netwerk interfaces hebben, alsook dynamisch netwerk interfaces. 
+Dynamische netwerk interfaces zijn interfaces die toegevoegd of verwijderd kunnen worden zonder dat de VM moet gereboot worden.
+In het voorbeeld van het koekjes bedrijf is het voldoende om HTTP en HTTPS verkeer toe te staan. 
+
+\subsection{Verbinden}
+De laatste drie secties: waarneembaarheid, veiligheid en gevorderd worden niet doorgenomen in de tutorial.
+Nu kan de VM aangemaakt worden door op create-knop te drukken.
+Eens de status van VM groen is wil dat zeggen dat VM up and running is, nu is het mogelijk om met de VM te verbinden. 
+Om te verbinden biedt het platform meerdere opties: via een ssh-in-browser verbinding, via een ssh-in-browser op een custom poort, via ssh-in-browser gebruikmakend van een gegeven private ssh key, via een gcloud command en via een andere ssh client.
+Tijdens het verbinden met ssh-in-browser zal Compute Engine een ephemeral ssh-key genereren, dit is een tijdelijke ssh-key die automatisch vervalt na een bepaalde periode.
+Het voordeel hiervan is dat er geen nood is aan het zelf genereren van ssh-keys en overbrengen van de publieke key.
+Het nadeel hiervan is dat er vertrouwd wordt op een derde partij die dit ephemeral certificaat uitreikt, in dit geval Compute Engine.
+Om dit te vermijden kan een ssh key gegenereed worden op de eigen computer. 
+Controleer eerst of er al geen bestaande ssh keys zijn in de map <gebruiker>/.ssh (Windows) of ~/.ssh (Linux).
+Indien er al ssh-key pair bestaat van het type rsa, ecdsa of ed25519 kan de hergebruikt worden een nieuwe key van hetzelfde type is overbodig voor deze toepassing.
+In de Console klik op de VM waarmee een verbinding moet gesloten worden, klik daarna op edit en onderaan de pagina is er een sectie genaamd Security and Access.
+In die sectie kan de publieke ssh key toegevoegd worden, de publieke key begint met het type daarna de key zelf en eindigt met een gebruikersnaam. 
+Zorg ervoor dat de gebruikersnaam dezelfde naam is van de gebruiker op VM waarmee de verbinding gesloten wordt.
+In een shell naar keuze op de eigen computer kan nu een verbinding gesloten worden met het volgende commando: ssh -i \texttt{<PATH\_NAAR\_PRIVATE\_KEY> <GEBRUIKERSNAAM>@<EXTERN\_IP\_ADDRESS>}.
+Indien er nog geen ssh-key pair bestaat, kan er een aangemaakt worden met het volgende commando \texttt{ssh-keygen -t <TYPE\_KEY> -f <PAD\_NAAR\_.ssh> -C <GEBRUIKERSNAAM>}.
+Als de ssh verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-release} en \texttt{who} gelijkaardige resultaten als in \ref{fig:VmInstanceCatOsRelease} en \ref{fig:VmInstanceWho} moeten weergeven.
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{\linewidth}
+        \includegraphics[width=\linewidth]{Images/VmInstanceCatOsRelease.png}
+        \caption{Commando cat /etc/os-release}
+        \label{fig:VmInstanceCatOsRelease}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[][][]{\linewidth}
+        \includegraphics[width=\linewidth]{Images/VmInstanceWho.png}
+        \caption{Commando who}
+        \label{fig:VmInstanceWho}
+    \end{subfigure}
+\end{figure}
+
+\section{Praktijkvoorbeeld}
+\subsection{MongoDB}
+De tutorial heeft duidelijk gemaakt hoe VM's kunnen aangemaakt worden, maar de VM zelf moet nog ingesteld worden om bruikbaar te zijn.
+Om de VM bruikbaar te maken wordt een mongodb cluster gehost op de VM die doormiddel van een ssh tunnel bruikbaar wordt gesteld aan de buiten wereld.
+Eerst moet een nieuwe VM aangemaakt worden met de image: \texttt{Rocky Linux 10 Optimized for GCP | x86/64}. Voor de correcte keuze van de resources zie \texttt{2 Voorbeeld}.
+Eens de VM aangemaakt is moet een ssh verbinding gemaakt worden of basis van een zelf toegevoegde public key, voor meer informatie zie \texttt{2.6 Verbinden}.
+Een goede gewoonte is om regelmatig alle packages bij te werken en zeker op een nieuw besturingssyteem. Dit kan doormiddel van het \texttt{sudo dnf update -y} gevolgd door \texttt{sudo dnf upgrade -y}.
+Rocky Linux is een Red-Hatt gebaseerd besturingssyteem en gebruikt daarom de Dandified YUM (DNF) package manager.
+MongoDB maakt initieel geen deel uit van Rocky Linux's 10 dnf repository door licentie conflicten. 
+MongoDB valt onder de Server Side Public License (SSPL) wat niet onder een Open Source Initiatief valt. Daarom is beslist om de MongoDB package te verwijderen uit de repository.
+Deze package kan wel manueel toegevoegd worden door in de \texttt{/etc/yum.repos.d/} folder een \texttt{mongodb-org-RELEASE\_SERIES.repo} bestand aan te maken.
+Nu kan de package geïnstalleerd worden met het commando \texttt{sudo dnf install mongodb-org}.
+Nadat de package geïnstalleerd is moet de service opgestart worden met het commando \texttt{sudo systemctl start mongod.service}.
+Indien de service automatisch moet opstarten als de VM opgestart wordt moet de service ook geënabled worden. Dit kan met het commando \texttt{sudo systemctl enable mongod.service}.
+
+\subsection{SSH Tunnel}
+De service die verantwoordelijk is voor ssh-connecties zou by default al moeten lopen, om te dit te controleren voer het volgende commando uit \texttt{sudo systemctl status sshd}
+Om de ssh tunnel te sluiten wordt het volgende commando gebruikt \texttt{ssh -N -L POORT:HOST:HOSTPOORT GEBRUIKERSNAAM@EXTERN\_IP\_ADRESS}.
+De \texttt{-N} optie vertelt de ssh verbinding om geen remote commando's uit te voeren, dit zijn commando's die worden uitgevoerd op de host.
+De \texttt{-L} optie wordt gebruikt voor port forwardings, in het commando wordt alle data op poort \texttt{POORT} geforward naar de host met ip adres \texttt{HOST} op poort \texttt{HOSTPOORT}.
+Dit geldt ook in de omgekeerde richting.
+Als bij het uitvoeren van het commando bv. \texttt{ssh -N -L 8080:127.0.0.1:27017 thomas\_vanhecke@34.76.154.33} geen foutmelding gegenereerd wordt is de tunnel succesvol aangemaakt.
+Dan kan een GUI zoals MongoDB Compass gebruikt worden om te interageren met de cluster. 
+De GUI moet in het voorbeeld luisteren op poort 8080 van host 127.0.0.1 ookwel localhost genoemd (eigen computer).
+Nu kan met de database geïnterageerd worden vanaf de eigen computer.
+MongoDB Compass biedt ook de mogelijkheid om zelf een ssh tunnel aan te maken, daardoor is er geen nood aan een aparte shell deze tunnel onderhoudt.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{Images/MongoDbCompassSshTunnel.png}
+    \caption{MongoDB Compass SSH Tunnel}
+    \label{fig:MongoDbCompassSshTunnel}
+\end{figure}
+
+Als de VM opnieuw opgestart wordt bestaat er een kans dat de SSH hostname (extern ip adres) veranderd, deze moet dan aangepast worden in de configuratie.
+Als test is het interessant om een nieuwe database aan te maken, een nieuwe collectie en een document toe te voegen aan de nieuwe connectie. 
+In \ref{fig:MongoDbCompassDbColDoc} is het resultaat van de test zichtbaar met een compass ssh tunnel alsook een tunnel in een externe shell.
+
+\begin{figure}[h!]
+    \includegraphics[width=\linewidth]{Images/MongoDbCompassDbColDoc.png}
+    \caption{MongoDB Compass Test Connection}
+    \label{fig:MongoDbCompassDbColDoc}
+\end{figure}
+
+\section{Wetenschappelijk besluit}
+Voor startups kan het interessant zijn om in het begin alles dat te maken heeft met hardware infrastructuur te outsourcen naar de cloud. 
+Hierdoor kan de meerderheid van de energie gespendeerd worden aan het uitwerken van het bussinesmodel. 
+Eens bedrijven groeien en meer resources ter beschikking hebben is het voordeliger om ook hardware infrastructuur zelf te gaan beheren, omdat dit op lange termijn goedkoper zal uitkomen.
+Het voordeel dat de cloud biedt, is dat het \texttt{ready-to-go} is, er is een kleine leercurve om bekend te geraken met de verschillende termen en configuratie mogelijkheden. 
+Het internet is hiervoor een goede startplaats. 
+Het nadeel is de afhankelijkheid van de cloud provider. 
+Voor bedrijven die werken met geklassificeerde data zou het veiliger zijn om hardware infrastructuur niet te outsourcen.
+In het besproken praktijkvoorbeeld zou MongoDB atlas kunnen gekozen worden in plaats van een Cloud VM die lokaal een cluster host.
+MongoDB Atlas is een volledig gemanaged platform dat databases aanbiedt als een service. In het besproken praktrijkvoorbeeld zou dit een beter keuze geweest zijn.
+
+In het algemeen ging het aanmaken van VM's op het GCP redelijk vlot. De enige verwarring was het toevoegen van een publieke key voor key-based authenticatie.
+Normaal biedt het platform ssh-in-browser aan waarbij zelf een publiek key file vanop de computer kan geselecteerd worden, dit bleek niet te werken. 
+Als de publiek key toegevoegd wordt aan de VM Configuratie moet de gebruikersnaam die zijn van de gebruiker op VM, anders kan er geen connectie gesloten worden.
+
+\end{document}
