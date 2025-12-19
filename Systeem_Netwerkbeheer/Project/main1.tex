@@ -1,40 +1,47 @@
 \documentclass{article}
 
-\usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{biblatex}
+\addbibresource{references.bib}
+\usepackage{hyperref}
 \usepackage{subcaption}
 
-\title{Systeem en Netwerkbeer}
-\author{Thomas Van Hecke}
-\date{\today}
+\begin{titlepage}
+    \title{Systeem en Netwerkbeheer}
+    \author{Thomas Van Hecke}
+    \date{\today}
+\end{titlepage}
 
 \begin{document}
+
 \maketitle
 \tableofcontents
 \newpage
+
 \section{Inleiding}
-Stel er bestaat een koekjes bedrijf en elk kwartaal wil dat bedrijf verkoopsresultaten opslaan en vergelijken met vorige kwartalen.
+Een bedrijf wil elk kwartaal de verkoopsresultaten opslaan en vergelijken met vorige kwartalen.
 De IT-dienst stelt voor om een computer aan te schaffen die deze resultaten kan opslaan en verwerken.
-Het bedrijf is nog in volle ontwikkeling en hebben het geld niet om dure hardware-infrastructuur aan te kopen.
-Los daarvan heeft de IT-dienst niet veel kennis van welke hardware ze moeten aankopen om deze computer te bouwen.
-Hoe kan er nu een computer aangeschaft worden zonder de grote instapkosten voor alle hardware?
-Om dit probleem op te lossen kan de cloud gebruikt worden.
-\subsection{Cloud}
+Het bedrijf is nog in volle ontwikkeling waardoor ze de middelen niet hebben om dure hardware-infrastructuur aan te kopen en te onderhouden.
+Hoe kan er nu een computer aangeschaft worden zonder grote instapkosten en onderhoudt?
+Om dit probleem op te lossen kan de men gebruik maken van de Cloud.
+
+\section{De Cloud}
 De cloud is een verzameling van computermiddelen.
 Enerzijds wordt er opslagruimte aangeboden zoals OneDrive van Microsoft, anderzijds worden er ook diensten aangeboden zoals extra rekenkracht en databases.
 Om deze computermiddelen aan te vragen bestaat er een online platform zoals het Google Cloud Platform \ref{fig:GoogleCloudPlatform}.
+
 \begin{figure}[!ht]
     \includegraphics[width=\linewidth]{Images/GoogleCloudPlatform.png}
     \caption{Google Cloud Platform}
     \label{fig:GoogleCloudPlatform}
 \end{figure}
 
-\subsection{Diensten}
 Computers in de cloud worden virtuele machines genoemd omdat deze machines in de realiteit niet echt bestaan, maar geëmuleerd worden in software d.m.v. een hypervisor.
 Een hypervisor is een besturingssysteem dat virtuele machines beheert.
 Zoals op de ontvangstpagina in \ref{fig:GoogleCloudPlatform} te zien is, kan er een virtuele machine worden aangemaakt met de (create a VM)-knop.
 
-\section{Technisch Overzicht}
+\section{Virtuele Machine: Configuratie}
+
 \subsection{Compute Engine API}
 Om bekend te geraken met het aanvragen van een VM, wordt de tutorial doorlopen die het platform aanbiedt.
 Om via het platform middelen aan te vragen, uit te lezen, bij te werken of te verwijderen moet de Compute Engine API geactiveerd worden.
@@ -164,9 +171,9 @@ Deze interfaces kunnen in hardware geïmplementeerd zijn zoals Netwerk Interface
 Indien deze interfaces in software zijn geïmplementeerd wordt ook wel van Virtuele Netwerk Interfaces gesproken.
 Een VM kan meerder netwerk interfaces hebben, alsook dynamisch netwerk interfaces. 
 Dynamische netwerk interfaces zijn interfaces die toegevoegd of verwijderd kunnen worden zonder dat de VM moet gereboot worden.
-In het voorbeeld van het koekjes bedrijf is het voldoende om HTTP en HTTPS verkeer toe te staan. 
+In het voorbeeld van het koekjes bedrijf is het voldoende om HTTP en HTTPS verkeer toe te staan.
 
-\subsection{Verbinden}
+\section{Virtuele Machine: Verbinding}
 De laatste drie secties: waarneembaarheid, veiligheid en gevorderd worden niet doorgenomen in de tutorial.
 Nu kan de VM aangemaakt worden door op create-knop te drukken.
 Eens de status van VM groen is wil dat zeggen dat VM up and running is, nu is het mogelijk om met de VM te verbinden. 
@@ -198,7 +205,8 @@ Als de ssh verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-relea
     \end{subfigure}
 \end{figure}
 
-\section{Casestudy: MongoDB}
+\section{Praktijkvoorbeeld: MongoDB}
+
 \subsection{MongoDB}
 De tutorial heeft duidelijk gemaakt hoe VM's kunnen aangemaakt worden, maar de VM zelf moet nog ingesteld worden om bruikbaar te zijn.
 Om de VM bruikbaar te maken wordt een mongodb cluster gehost op de VM die doormiddel van een ssh tunnel bruikbaar wordt gesteld aan de buiten wereld.
@@ -242,7 +250,7 @@ In \ref{fig:MongoDbCompassDbColDoc} is het resultaat van de test zichtbaar met e
     \label{fig:MongoDbCompassDbColDoc}
 \end{figure}
 
-\section{Wetenschappelijk besluit}
+\section{Besluit}
 Voor startups kan het interessant zijn om in het begin alles dat te maken heeft met hardware infrastructuur te outsourcen naar de cloud. 
 Hierdoor kan de meerderheid van de energie gespendeerd worden aan het uitwerken van het bussinesmodel. 
 Eens bedrijven groeien en meer resources ter beschikking hebben is het voordeliger om ook hardware infrastructuur zelf te gaan beheren, omdat dit op lange termijn goedkoper zal uitkomen.
@@ -256,5 +264,7 @@ MongoDB Atlas is een volledig gemanaged platform dat databases aanbiedt als een 
 In het algemeen ging het aanmaken van VM's op het GCP redelijk vlot. De enige verwarring was het toevoegen van een publieke key voor key-based authenticatie.
 Normaal biedt het platform ssh-in-browser aan waarbij zelf een publiek key file vanop de computer kan geselecteerd worden, dit bleek niet te werken. 
 Als de publiek key toegevoegd wordt aan de VM Configuratie moet de gebruikersnaam die zijn van de gebruiker op VM, anders kan er geen connectie gesloten worden.
+
+\printbibliography
 
 \end{document}
