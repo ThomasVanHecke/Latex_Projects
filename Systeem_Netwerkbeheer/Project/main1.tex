@@ -10,6 +10,9 @@
 \usepackage{float}
 \usepackage{wrapfig}
 
+\input{acronyms.tex}
+\makeglossaries
+
 \begin{titlepage}
     \title{Systeem en Netwerkbeheer}
     \author{Thomas Van Hecke}
@@ -42,15 +45,15 @@ Om deze computermiddelen aan te vragen bestaat er een online platform zoals het 
 
 Computers in de cloud worden virtuele machines genoemd omdat deze machines in de realiteit niet echt bestaan, maar geëmuleerd worden in software d.m.v. een hypervisor.
 Een hypervisor is een besturingssysteem dat virtuele machines beheert.
-Zoals op de ontvangstpagina in \ref{fig:GoogleCloudPlatform} te zien is, kan er een virtuele machine worden aangemaakt met de (create a VM)-knop.
+Zoals op de ontvangstpagina in \ref{fig:GoogleCloudPlatform} te zien is, kan er een \gls{vm} worden aangemaakt met de (create a VM)-knop.
 
 \section{Virtuele Machine: Configuratie}
 
 \subsection{Compute Engine API}
-Om bekend te geraken met het aanvragen van een VM, wordt de tutorial doorlopen die het platform aanbiedt.
-Om via het platform middelen aan te vragen, uit te lezen, bij te werken of te verwijderen moet de Compute Engine API geactiveerd worden.
-Deze API laat toe dat het platform geldige API calls maakt naar de corresponderende endpoints, deze API is noodzakelijk omdat het alle functionaliteit voorziet voor het aanmaken en opstarten van VM's \cite{gcp_compute_engine_API}.
-Wanneer alle VM's ook wel instances (entiteiten) genoemd, moeten opgelijst worden zal het platform een API methode zoals: \texttt{compute.v1.instances.aggregatedList} gebruiken \cite{gcp_instances_rest}.
+Om bekend te geraken met het aanvragen van een \gls{vm}, wordt de tutorial doorlopen die het platform aanbiedt.
+Om via het platform middelen aan te vragen, uit te lezen, bij te werken of te verwijderen moet de Compute Engine \gls{api} geactiveerd worden.
+Deze \gls{api} laat toe dat het platform geldige \gls{api} calls maakt naar de corresponderende endpoints, deze \gls{api} is noodzakelijk omdat het alle functionaliteit voorziet voor het aanmaken en opstarten van \gls{vm}'s \cite{gcp_compute_engine_API}.
+Wanneer alle \gls{vm}'s ook wel instances (entiteiten) genoemd, moeten opgelijst worden zal het platform een \gls{api} methode zoals: \texttt{compute.v1.instances.aggregatedList} gebruiken \cite{gcp_instances_rest}.
 Deze methode maakt onderliggend een HTTP GET request naar \url{https://compute.googleapis.com/compute/v1/projects/{project}/aggregated/instances}.
 Dit is maar één method, in realiteit worden een tientallen gemaakt.
 
@@ -62,13 +65,12 @@ Dit is maar één method, in realiteit worden een tientallen gemaakt.
 
 Elke kleur in \ref{fig:ComputeEngineApiBarChart} stelt een andere methode voor.
 
-\newpage
 \subsection{Machine Configuratie}
-Om een VM gestructureerd op te bouwen biedt het Google Cloud Platform verschillende secties.
+Om een \gls{vm} gestructureerd op te bouwen biedt het Google Cloud Platform verschillende secties.
 
 \begin{wrapfigure}{l}{0.3\linewidth}
     \includegraphics[width=0.9\linewidth]{Images/VmSections.png}
-    \caption{VM secties}
+    \caption{\gls{vm} secties}
     \label{fig:VmSections}
 \end{wrapfigure}
 
@@ -76,7 +78,7 @@ De eerste sectie is de configuratie \ref{fig:VmSections} van de machine.
 Deze sectie omvat:
 
 \begin{enumerate}
-    \item Een naam geven aan de VM
+    \item Een naam geven aan de \gls{vm}
     \item Een regio kiezen voor de resources
     \item Een zone in de gekozen regio kiezen
     \item Een machine series kiezen
@@ -86,13 +88,13 @@ Deze sectie omvat:
 
 De regio is een individuele geografische plaats waar de resources plaatsvinden bv. europa-west1 \cite{gcp_regions_zones}.
 Een regio bestaat uit verschillende zones zoals bv. europa-west1-a.
-Sommige resources zijn zone specifiek zoals compute engine instances (bv. VM's) andere resources zijn regio specifiek bv. statische externe IP-adressen.
+Sommige resources zijn zone specifiek zoals compute engine instances (bv. \gls{vm}'s) andere resources zijn regio specifiek bv. statische externe \gls{ip}-adressen.
 Een zone bepaalt dus welke computing resources er ter beschikking zijn en waar de data opgeslagen wordt \cite{gcp_regions_zones}.
-Om redundantie op te bouwen kan het dus interessant zijn om meerdere VM's te verspreiden over verschillende regio's en zones.
+Om redundantie op te bouwen kan het dus interessant zijn om meerdere \gls{vm}'s te verspreiden over verschillende regio's en zones.
 Om latency te verminderen kan het interessant zijn om de primaire regio (belangrijkste regio) zo dicht mogelijk bij de doelgroep te plaatsen.
-In het voorbeeld van het bedrijf kan het dus interessant zijn om twee VM's aan te maken in twee verschillende regio's en om deze regio's geografische zo dicht mogelijk te kiezen bij de locatie van het bedrijf.
-Een machine series zijn machine types met soortgelijke CPU's en geheugen mogelijkheden \cite{gcp_machine_series}. Er bestaan verschillende groepen van series bv. deze voor algemeen gebruik. 
-Elke series biedt een bereik met virtuele CPU's (vCPU's) en een bereik van geheugen die beschikbaar is binnen die serie.
+In het voorbeeld van het bedrijf kan het dus interessant zijn om twee \gls{vm}'s aan te maken in twee verschillende regio's en om deze regio's geografische zo dicht mogelijk te kiezen bij de locatie van het bedrijf.
+Een machine series zijn machine types met soortgelijke \gls{cpu}'s en geheugen mogelijkheden \cite{gcp_machine_series}. Er bestaan verschillende groepen van series bv. deze voor algemeen gebruik. 
+Elke series biedt een bereik met virtuele \gls{cpu}'s (vCPU's) en een bereik van geheugen die beschikbaar is binnen die serie.
 Elke series is bedoeld voor een bepaald gebruik, enerzijds zijn er series bedoeld voor een gebalanceerde prijs en performantie, anderzijds zijn er die bedoeld zijn voor continue performantie.
 Voor het bedrijf kan het dus interessant zijn om voor een algemene series bv. een N-series te kiezen die een balans aanbiedt tussen kost en performantie.
 Een bepaalde series biedt verschillende machine types aan, elk met een aantal vCPU's en een hoeveelheid geheugen. Een type kan ook zelf samengesteld worden.
@@ -109,16 +111,16 @@ Deze sectie omvat:
 \end{enumerate}
 
 Tot op heden bestaan er drie veel gebruikte besturingssystemen elk met hun voor- en nadelen.
-Deze drie zijn Windows OS, Mac OS en alle Linux gebaseerde OS'es.
-Voor de keuze van het besturingssysteem heeft de tutorial gekozen voor Ubuntu 24.04 LTS, dit is een linux gebaseerd OS.
+Deze drie zijn Windows \gls{os}, Mac \gls{os} en alle Linux gebaseerde \gls{os}'es.
+Voor de keuze van het besturingssysteem heeft de tutorial gekozen voor Ubuntu 24.04 LTS, dit is een linux gebaseerd \gls{os}.
 Elk besturingssysteem heeft verschillende versies, nieuwere versies zijn bedoeld om problemen van oudere versies op te lossen. Desondanks kunnen ze ook nieuwe kwetsbaarheden introduceren.
 Een boot disk type is het type van het opslagmedium waarop het besturingssysteem staat van de virtuele machine.
-Tijdens het doorlopen van de tutorial kun je kiezen uit vier boot disk types: balanced persistent disk, extreme persistent disk, SSD persistent disk en standard persistent disk.
+Tijdens het doorlopen van de tutorial kun je kiezen uit vier boot disk types: balanced persistent disk, extreme persistent disk, \gls{ssd} persistent disk en standard persistent disk.
 Een persistent disk type is een network storage device, dit is geen fysiek storage medium dat verbonden is met de host waarop de instance draait.
-Elk type gebruikt een Solid State Drive (SSD) als opslagmedium, uitgezonderd het standard persistent type wat een Hard Disk Drive (HDD) gebruikt \cite{gcp_disks}.
-SSD's en HDD's hebben beide hun voor- en nadelen. In het algemeen is een SSD beter voor performantie en een HDD beter voor kostenreductie \cite{stellar_ssd_hdd}.
-In het voorbeeld van het bedrijf zou een SSD persistent disk geschikt zijn omdat het een goede balans levert tussen performantie en kost.
-Een opslag medium heeft ook een bepaalde grootte bv. 512 GB. In de cloud worden VM's aangemaakt met cloud image's die geschreven worden naar de boot disk van die VM.
+Elk type gebruikt een \gls{ssd} als opslagmedium, uitgezonderd het standard persistent type wat een \gls{hdd} gebruikt \cite{gcp_disks}.
+\gls{ssd}'s en \gls{ssd}'s hebben beide hun voor- en nadelen. In het algemeen is een \gls{ssd} beter voor performantie en een \gls{hdd} beter voor kostenreductie \cite{stellar_ssd_hdd}.
+In het voorbeeld van het bedrijf zou een \gls{ssd} persistent disk geschikt zijn omdat het een goede balans levert tussen performantie en kost.
+Een opslag medium heeft ook een bepaalde grootte bv. 512 GB. In de cloud worden \gls{vm}'s aangemaakt met cloud image's die geschreven worden naar de boot disk van die \gls{vm}.
 Volgens de \href{https://documentation.ubuntu.com/server/reference/installation/system-requirements/index.html}{officiële Ubuntu website} is er een minimum van 4 GB nodig voor cloud images, maar het minimum op het platform is 10 GB.
 Voor het doorlopen van de tutorial is 10 GB voldoende.
 Om een besturingssysteem te kiezen is het ook mogelijk om zelfgemaakte images, snapshots of bestaande disks te gebruiken.
@@ -131,8 +133,8 @@ Deze sectie omvat:
     \item De keuze van het type replicatie
 \end{enumerate}
 
-Om de data van de VM te beschermen biedt Google drie types back-ups: een back-up plan, snapshot schedules en no back-ups. 
-Een back-up plan kopieert de data van de volledige VM, dit kan meerdere disks omvatten. 
+Om de data van de \gls{vm} te beschermen biedt Google drie types back-ups: een back-up plan, snapshot schedules en no back-ups. 
+Een back-up plan kopieert de data van de volledige \gls{vm}, dit kan meerdere disks omvatten. 
 Een snapshot kopieert de data van één enkele disk \cite{starwind_backups}.
 Naast back-ups biedt Google ook drie types van replicatie aan: synchrone replicatie, asynchrone replicatie en excludeer boot disk van data replicatie.
 Synchrone replicatie houdt in dat er één regio boot disk bestaat die wordt gerepliceerd naar twee zones. 
@@ -148,39 +150,39 @@ Deze sectie omvat:
     \item Het instellen van de firewall
     \item Het kiezen van een netwerk tag
     \item Het kiezen van een hostname
-    \item Het toestaan van IP-forwarding
+    \item Het toestaan van \gls{ip}-forwarding
     \item Het toestaan van een verhoogde bandbreedte
     \item Het kiezen van de netwerk interfaces
 \end{enumerate}
 
 De firewall bepaalt welk type inkomend netwerkverkeer toegelaten wordt en welke geweigerd wordt. 
-Het platform biedt drie mogelijkheden: HTTP verkeer toelaten, HTTPS verkeer toelaten en load balancer health checks.
-Om de tutorial te volgen selecteer je enkel HTTP verkeer toelaten.
-Een netwerk tag is een string (naam) die een VM toegewezen krijgt, daarna is het mogelijk om firewall regels op te leggen op een tag.
-Elke VM met een tag krijgt dan de firewall regels van die tag \cite{gcp_network_tags}. 
-Dit kan interessant zijn om repetitieve taken te vermijden en grotere groepen VM's te beheren.
-Een hostname is fully qualified DNS-naam, ook wel fully qualified domain name (FQDN) genoemd, die je aan de VM kan geven. 
-Een hostname bestaat uit minimaal twee labels die samengevoegd zijn met puntjes bv. bedrijf.com is een FQDN \cite{gcp_custom_hostname}.
+Het platform biedt drie mogelijkheden: \gls{http} verkeer toelaten, \gls{https} verkeer toelaten en load balancer health checks.
+Om de tutorial te volgen selecteer je enkel \gls{http} verkeer toelaten.
+Een netwerk tag is een string (naam) die een \gls{vm} toegewezen krijgt, daarna is het mogelijk om firewall regels op te leggen op een tag.
+Elke \gls{vm} met een tag krijgt dan de firewall regels van die tag \cite{gcp_network_tags}. 
+Dit kan interessant zijn om repetitieve taken te vermijden en grotere groepen \gls{vm}'s te beheren.
+Een hostname is een \gls{fqdn} die je aan de \gls{vm} kan geven. 
+Een hostname bestaat uit minimaal twee labels die samengevoegd zijn met puntjes bv. bedrijf.com is een \gls{fqdn} \cite{gcp_custom_hostname}.
 Zelfgekozen hostname's kunnen handig zijn om conventies aan te houden of indien er applicaties een specifieke hostname verwachten.
-In beide gevallen (wel/geen hostname) zal Google Cloud automatisch een interne DNS-naam genereren voor de VM, alsook een interne DNS A record.
-Om een bruikbare hostname aan te maken moet er zelf nog een interne DNS-record aangemaakt worden voor de correcte zone, dit kan met Cloud DNS.
-IP-forwarding is het proces waarbij een device netwerk pakketjes op één interface ontvangt en op een andere interface plaatst richting de bestemming van dat pakketje. 
+In beide gevallen (wel/geen hostname) zal Google Cloud automatisch een interne \gls{dns}-naam genereren voor de \gls{vm}, alsook een interne \gls{dns} A record.
+Om een bruikbare hostname aan te maken moet er zelf nog een interne \gls{dns}-record aangemaakt worden voor de correcte zone, dit kan met Cloud \gls{dns}.
+\gls{ip}-forwarding is het proces waarbij een device netwerk pakketjes op één interface ontvangt en op een andere interface plaatst richting de bestemming van dat pakketje. 
 Een voorbeeld van zo'n device is een router. 
 Een verhoogde bandbreedte zorgt voor een verhoogde throughput wat voor een snellere communicatie zorgt.
 De meeste huishoudens hebben een bandbreedte van 150 Mbps downlink en 30 Mbps uplink. 
 De Compute Engine's verhoogde bandbreedte biedt een maximum uplink (outbound) van 2 Gbps, de downlink is niet gespecifieerd maar is meestal hoger dan de uplink.
 Deze asymmetrie komt vaak voor omdat over het algemeen meer data gedownload wordt dan geüpload.
 Een netwerk interface is de verbinding tussen een device en een netwerk. 
-Deze interfaces kunnen in hardware geïmplementeerd zijn zoals Netwerk Interface Cards (NIC's) of in software. 
+Deze interfaces kunnen in hardware geïmplementeerd zijn zoals \gls{nic} of in software. 
 Indien deze interfaces in software zijn geïmplementeerd wordt ook wel van Virtuele Netwerk Interfaces gesproken.
-Een VM kan meerdere netwerk interfaces hebben, alsook dynamische netwerk interfaces. 
-Dynamische netwerk interfaces zijn interfaces die toegevoegd of verwijderd kunnen worden zonder dat de VM moet gereboot worden.
-In het voorbeeld van het bedrijf is het voldoende om HTTP en HTTPS verkeer toe te staan.
+Een \gls{vm} kan meerdere netwerk interfaces hebben, alsook dynamische netwerk interfaces. 
+Dynamische netwerk interfaces zijn interfaces die toegevoegd of verwijderd kunnen worden zonder dat de \gls{vm} moet gereboot worden.
+In het voorbeeld van het bedrijf is het voldoende om \gls{http} en \gls{https} verkeer toe te staan.
 
 \section{Virtuele Machine: Verbinding}
 De laatste drie secties zijn: waarneembaarheid, veiligheid en gevorderd. Deze worden niet doorgenomen in de tutorial.
-Nu kan de VM aangemaakt worden door op create-knop te drukken.
-Eens de status van VM groen is wil dat zeggen dat VM up-and-running is, nu is het mogelijk om met de VM te verbinden. 
+Nu kan de \gls{vm} aangemaakt worden door op create-knop te drukken.
+Eens de status van \gls{vm} groen is wil dat zeggen dat \gls{vm} up-and-running is, nu is het mogelijk om met de \gls{vm} te verbinden. 
 Om te verbinden biedt het platform meerdere opties: via een ssh-in-browser verbinding, via een ssh-in-browser op een custom poort, via ssh-in-browser gebruikmakend van een gegeven private ssh-key, via een gcloud command en via een andere ssh-client.
 Tijdens het verbinden met ssh-in-browser zal Compute Engine een ephemeral ssh-key genereren, dit is een tijdelijke ssh-key die automatisch vervalt na een bepaalde periode \cite{ssh_ephemeral}.
 Het voordeel hiervan is dat er geen nood is aan het zelf genereren van ssh-keys en het zelf overbrengen van de publieke key.
@@ -188,9 +190,9 @@ Het nadeel hiervan is dat er vertrouwd wordt op een derde partij die dit ephemer
 Om dit te vermijden kan een ssh-key gegenereed worden op de eigen computer. 
 Controleer eerst of er al geen bestaande ssh keys zijn in de map <gebruiker>/.ssh (Windows) of ~/.ssh (Linux).
 Indien er al ssh-key pair bestaat van het type rsa, ecdsa of ed25519 kan deze hergebruikt worden. Een nieuwe ssh-key pair van hetzelfde type is overbodig voor deze toepassing. Secure shell verbindingen zijn veilige verbindingen dankzij asymmetrische encryptie. Zolang de private key van een ssh-key pair niet wordt verspreidt kan de publieke key blijven gedistribueerd worden zonder veiligheids risico's \cite{wikipedia_ssh}.
-Om via een OpenSSH client te verbinden, klik in de console op de VM waarmee een verbinding moet gesloten worden, klik daarna op edit en onderaan de pagina is er een sectie genaamd \texttt{Security and Access}.
+Om via een OpenSSH client te verbinden, klik in de console op de \gls{vm} waarmee een verbinding moet gesloten worden, klik daarna op edit en onderaan de pagina is er een sectie genaamd \texttt{Security and Access}.
 In die sectie kan de publieke ssh-key toegevoegd worden, de publieke key begint met het type daarna de key zelf en eindigt met een gebruikersnaam. 
-Zorg ervoor dat de gebruikersnaam dezelfde naam is van de gebruiker op VM.
+Zorg ervoor dat de gebruikersnaam dezelfde naam is van de gebruiker op \gls{vm}.
 In een shell naar keuze op de eigen computer kan nu een verbinding gesloten worden met het volgende commando:
 
 \begin{lstlisting}[language=bash, caption={SSH-verbinding}, breaklines]
@@ -222,10 +224,10 @@ Als de ssh-verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-relea
 \section{Praktijkvoorbeeld: MongoDB}
 
 \subsection{MongoDB}
-De tutorial heeft duidelijk gemaakt hoe VM's kunnen aangemaakt worden, maar de VM zelf moet nog ingesteld worden om bruikbaar te zijn.
-Om de VM bruikbaar te maken wordt een mongodb cluster gehost op de VM, die door middel van een ssh-tunnel bruikbaar wordt gesteld aan de buiten wereld.
-Eerst moet een nieuwe VM aangemaakt worden met de image: \texttt{Rocky Linux 10 Optimized for GCP | x86/64}. Voor de correcte keuze van de resources zie \texttt{Virtuele Machine: Configuratie}.
-Eens de VM aangemaakt is moet een ssh-verbinding gemaakt worden op basis van een zelf toegevoegde public key, voor meer informatie zie \texttt{Virtuele Machine: Verbinding}.
+De tutorial heeft duidelijk gemaakt hoe \gls{vm}'s kunnen aangemaakt worden, maar de \gls{vm} zelf moet nog ingesteld worden om bruikbaar te zijn.
+Om de \gls{vm} bruikbaar te maken wordt een mongodb cluster gehost op de \gls{vm}, die door middel van een ssh-tunnel bruikbaar wordt gesteld aan de buiten wereld.
+Eerst moet een nieuwe \gls{vm} aangemaakt worden met de image: \texttt{Rocky Linux 10 Optimized for GCP | x86/64}. Voor de correcte keuze van de resources zie \texttt{Virtuele Machine: Configuratie}.
+Eens de \gls{vm} aangemaakt is moet een ssh-verbinding gemaakt worden op basis van een zelf toegevoegde public key, voor meer informatie zie \texttt{Virtuele Machine: Verbinding}.
 Een goede gewoonte is om regelmatig alle packages bij te werken en zeker op een nieuw besturingssysteem. Dit kan door middel van het commando:
 
 \begin{lstlisting}[language=bash, caption={Update packages}, breaklines]
@@ -233,9 +235,9 @@ Een goede gewoonte is om regelmatig alle packages bij te werken en zeker op een 
     sudo dnf upgrade -y
 \end{lstlisting}
 
-Rocky Linux is een Red-Hatt gebaseerd besturingssysteem en gebruikt daarom de Dandified YUM (DNF) package manager \cite{rocky_linux_dnf}.
-MongoDB maakt initieel geen deel uit van Rocky Linux's 10 dnf repository door licentie conflicten. 
-MongoDB valt onder de Server Side Public License (SSPL) wat niet onder een Open Source Initiatief valt. Daarom is beslist om de MongoDB package te verwijderen uit de repository \cite{fedora_mongodb}.
+Rocky Linux is een Red-Hatt gebaseerd besturingssysteem en gebruikt daarom de \gls{dnf} package manager \cite{rocky_linux_dnf}.
+MongoDB maakt initieel geen deel uit van Rocky Linux's 10 \gls{dnf} repository door licentie conflicten. 
+MongoDB valt onder de \gls{sspl} wat niet onder een Open Source Initiatief valt. Daarom is beslist om de MongoDB package te verwijderen uit de repository \cite{fedora_mongodb}.
 Deze package kan wel manueel toegevoegd worden door in de \texttt{/etc/yum.repos.d/} folder een \texttt{mongodb-org-RELEASE\_SERIES.repo} bestand aan te maken \cite{redswitches_mongodb} \cite{atlantic_mongodb}. De volledige tutorial is \href{https://www.atlantic.net/dedicated-server-hosting/how-to-install-and-use-mongodb-on-rocky-linux-10/}{hier} te vinden.
 Nu kan de package geïnstalleerd worden met het commando: 
 
@@ -248,7 +250,7 @@ Nadat de package geïnstalleerd is moet de service opgestart worden met het comm
     sudo systemctl start mongod.service
 \end{lstlisting}
 
-Indien de service automatisch moet opstarten als de VM opstart, moet de service ook geënabled worden. Dit kan met het commando: 
+Indien de service automatisch moet opstarten als de \gls{vm} opstart, moet de service ook geënabled worden. Dit kan met het commando: 
 \begin{lstlisting}[language=bash, caption={MongoDB service automatisch opstarten}, breaklines]
     sudo systemctl enable mongod.service
 \end{lstlisting}
@@ -266,8 +268,8 @@ Om de ssh-tunnel te openen wordt het volgende commando gebruikt:
     ssh -N -L <POORT:HOST:HOSTPOORT> <GEBRUIKERSNAAM>@<EXTERN_IP_ADRESS>
 \end{lstlisting}
 
-De \texttt{-N} optie vertelt de ssh-verbinding om geen remote commando's uit te voeren, dit zijn commando's die worden uitgevoerd op de VM.
-De \texttt{-L} optie wordt gebruikt voor port forwardings, in het commando wordt alle data op poort \texttt{POORT} geforward naar de host met ip adres \texttt{HOST} op poort \texttt{HOSTPOORT}.
+De \texttt{-N} optie vertelt de ssh-verbinding om geen remote commando's uit te voeren, dit zijn commando's die worden uitgevoerd op de \gls{vm}.
+De \texttt{-L} optie wordt gebruikt voor port forwardings, in het commando wordt alle data op poort \texttt{POORT} geforward naar de host met \gls{ip} adres \texttt{HOST} op poort \texttt{HOSTPOORT}.
 Dit geldt ook in de omgekeerde richting. Een ssh-tunnel kan er als volgt uit zien: \texttt{ssh -N -L 8080:127.0.0.1:27017 thomas\_vanhecke@34.76.154.33}.
 Als bij het uitvoeren van het commando geen foutmelding gegenereerd wordt is de tunnel succesvol aangemaakt.
 Daarna kan een GUI zoals MongoDB Compass gebruikt worden om te interageren met de cluster. 
@@ -282,7 +284,7 @@ MongoDB Compass biedt ook de mogelijkheid om zelf een ssh-tunnel aan te maken, d
     \label{fig:MongoDbCompassSshTunnel}
 \end{figure}
 
-Als de VM opnieuw opgestart wordt, bestaat er een kans dat de ssh-hostname (extern ip adres) veranderd, deze moet dan aangepast worden in de configuratie.
+Als de \gls{vm} opnieuw opgestart wordt, bestaat er een kans dat de ssh-hostname (extern \gls{ip} adres) veranderd, deze moet dan aangepast worden in de configuratie.
 Als test is het interessant om een nieuwe database aan te maken, een nieuwe collectie en een document toe te voegen aan de nieuwe connectie. 
 In \ref{fig:MongoDbCompassDbColDoc} is het resultaat van de test zichtbaar met een compass ssh-tunnel alsook een tunnel in een externe shell.
 
@@ -302,15 +304,16 @@ Het voordeel dat de cloud biedt, is dat het \texttt{ready-to-go} is, er is een k
 Het internet is hiervoor een goede startplaats. 
 Het nadeel is de afhankelijkheid van de cloud provider. 
 Voor bedrijven die werken met geklassificeerde data zou het veiliger zijn om de hardware-infrastructuur niet te outsourcen.
-In het besproken praktijkvoorbeeld zou MongoDB atlas kunnen gekozen worden in plaats van een Cloud VM die lokaal een cluster host. MongoDB Atlas is een vorm van Internet as a Service (IaaS) en is biedt een cloud infrastructuur aan die gespecialiseerd is voor het opzetten van clusters. In het besproken praktijkvoorbeeld zou dit een betere keuze zijn.
+In het besproken praktijkvoorbeeld zou MongoDB atlas kunnen gekozen worden in plaats van een Cloud \gls{vm} die lokaal een cluster host. MongoDB Atlas is een vorm van Internet as a Service (IaaS) en is biedt een cloud infrastructuur aan die gespecialiseerd is voor het opzetten van clusters. In het besproken praktijkvoorbeeld zou dit een betere keuze zijn.
 
-In het algemeen ging het aanmaken van VM's op het GCP redelijk vlot. De enige verwarring was het toevoegen van een publieke key voor key-based authenticatie.
-Als de publiek key toegevoegd wordt aan de VM Configuratie moet de gebruikersnaam die zijn van de gebruiker op VM, anders kan er geen connectie gesloten worden.
+In het algemeen ging het aanmaken van \gls{vm}'s op het \gls{gcp} redelijk vlot. De enige verwarring was het toevoegen van een publieke key voor key-based authenticatie.
+Als de publiek key toegevoegd wordt aan de \gls{vm} Configuratie moet de gebruikersnaam die zijn van de gebruiker op \gls{vm}, anders kan er geen connectie gesloten worden.
 Normaal biedt het platform ssh-in-browser aan waarbij zelf een publiek key file van op de computer kan geselecteerd worden, dit bleek niet te werken. 
 
 \newpage
 
 \lstlistoflistings
+\printglossaries
 \printbibliography
 
 \end{document}
