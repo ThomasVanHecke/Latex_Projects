@@ -7,6 +7,8 @@
 \usepackage{subcaption}
 \usepackage{parskip}
 \usepackage{listings}
+\usepackage{float}
+\usepackage{wrapfig}
 
 \begin{titlepage}
     \title{Systeem en Netwerkbeheer}
@@ -32,7 +34,7 @@ De cloud is een verzameling van computermiddelen \cite{azure_cloud_def}.
 Enerzijds wordt er opslagruimte aangeboden zoals OneDrive van Microsoft, anderzijds worden er ook diensten aangeboden zoals extra rekenkracht en databases.
 Om deze computermiddelen aan te vragen bestaat er een online platform zoals het Google Cloud Platform \ref{fig:GoogleCloudPlatform}.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{Images/GoogleCloudPlatform.png}
     \caption{Google Cloud Platform}
     \label{fig:GoogleCloudPlatform}
@@ -52,7 +54,7 @@ Wanneer alle VM's ook wel instances (entiteiten) genoemd, moeten opgelijst worde
 Deze methode maakt onderliggend een HTTP GET request naar \url{https://compute.googleapis.com/compute/v1/projects/{project}/aggregated/instances}.
 Dit is maar één method, in realiteit worden een tientallen gemaakt.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{Images/ComputeEngineApiBarChart.png}
     \caption{Compute Engine API Bar Chart}
     \label{fig:ComputeEngineApiBarChart}
@@ -60,15 +62,15 @@ Dit is maar één method, in realiteit worden een tientallen gemaakt.
 
 Elke kleur in \ref{fig:ComputeEngineApiBarChart} stelt een andere methode voor.
 
+\newpage
 \subsection{Machine Configuratie}
 Om een VM gestructureerd op te bouwen biedt het Google Cloud Platform verschillende secties.
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.3\linewidth]{Images/VmSections.png}
-    \caption{VM Different Sections}
+\begin{wrapfigure}{l}{0.3\linewidth}
+    \includegraphics[width=0.9\linewidth]{Images/VmSections.png}
+    \caption{VM secties}
     \label{fig:VmSections}
-\end{figure}
+\end{wrapfigure}
 
 De eerste sectie is de configuratie \ref{fig:VmSections} van de machine.
 Deze sectie omvat:
@@ -79,7 +81,7 @@ Deze sectie omvat:
     \item Een zone in de gekozen regio kiezen
     \item Een machine series kiezen
     \item Een machine type kiezen
-    \item Een provisie model kiezen
+    \item Een provisie model kiezen 
 \end{enumerate}
 
 De regio is een individuele geografische plaats waar de resources plaatsvinden bv. europa-west1 \cite{gcp_regions_zones}.
@@ -202,7 +204,7 @@ Indien er nog geen ssh-key pair bestaat, kan er een aangemaakt worden met het vo
 \end{lstlisting}
 
 Als de ssh-verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-release} en \texttt{who} gelijkaardige resultaten als in \ref{fig:VmInstanceCatOsRelease} en \ref{fig:VmInstanceWho} moeten weergeven.
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \begin{subfigure}{\linewidth}
         \includegraphics[width=\linewidth]{Images/VmInstanceCatOsRelease.png}
@@ -259,9 +261,11 @@ De service die verantwoordelijk is voor ssh-connecties zou by default al moeten 
 \end{lstlisting}
 
 Om de ssh-tunnel te openen wordt het volgende commando gebruikt:
+
 \begin{lstlisting}[language=bash, caption={SSH-tunnel openen}, breaklines]
     ssh -N -L <POORT:HOST:HOSTPOORT> <GEBRUIKERSNAAM>@<EXTERN_IP_ADRESS>
 \end{lstlisting}
+
 De \texttt{-N} optie vertelt de ssh-verbinding om geen remote commando's uit te voeren, dit zijn commando's die worden uitgevoerd op de VM.
 De \texttt{-L} optie wordt gebruikt voor port forwardings, in het commando wordt alle data op poort \texttt{POORT} geforward naar de host met ip adres \texttt{HOST} op poort \texttt{HOSTPOORT}.
 Dit geldt ook in de omgekeerde richting. Een ssh-tunnel kan er als volgt uit zien: \texttt{ssh -N -L 8080:127.0.0.1:27017 thomas\_vanhecke@34.76.154.33}.
@@ -271,7 +275,7 @@ De GUI moet volgens het voorbeeld luisteren op poort 8080 van host 127.0.0.1, oo
 Nu kan met de database geïnterageerd worden vanaf de eigen computer.
 MongoDB Compass biedt ook de mogelijkheid om zelf een ssh-tunnel aan te maken, daardoor is er geen nood aan een aparte shell die deze tunnel onderhoudt.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{Images/MongoDbCompassSshTunnel.png}
     \caption{MongoDB Compass SSH-Tunnel}
@@ -282,7 +286,7 @@ Als de VM opnieuw opgestart wordt, bestaat er een kans dat de ssh-hostname (exte
 Als test is het interessant om een nieuwe database aan te maken, een nieuwe collectie en een document toe te voegen aan de nieuwe connectie. 
 In \ref{fig:MongoDbCompassDbColDoc} is het resultaat van de test zichtbaar met een compass ssh-tunnel alsook een tunnel in een externe shell.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{Images/MongoDbCompassDbColDoc.png}
     \caption{MongoDB Compass Test Connection}
     \label{fig:MongoDbCompassDbColDoc}
@@ -292,7 +296,7 @@ Indien er authenticatie is ingesteld voor de interactie met MongoDB vergeet de a
 
 \section{Besluit}
 Voor start-ups kan het interessant zijn om in het begin alles dat te maken heeft met hardware-infrastructuur te outsourcen naar de cloud. 
-Hierdoor kan de meerderheid van de energie gespendeerd worden aan het uitwerken van het bussinesmodel. 
+Hierdoor kan de meerderheid van de energie gespendeerd worden aan het uitwerken van het businessmodel. 
 Eens bedrijven groeien en meer resources ter beschikking hebben is het voordeliger om ook de hardware-infrastructuur zelf te gaan beheren, omdat dit op lange termijn goedkoper zal uitkomen.
 Het voordeel dat de cloud biedt, is dat het \texttt{ready-to-go} is, er is een kleine leercurve om bekend te worden met de verschillende termen en configuratie mogelijkheden. 
 Het internet is hiervoor een goede startplaats. 
@@ -306,6 +310,7 @@ Normaal biedt het platform ssh-in-browser aan waarbij zelf een publiek key file 
 
 \newpage
 
+\lstlistoflistings
 \printbibliography
 
 \end{document}
