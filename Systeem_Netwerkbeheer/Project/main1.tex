@@ -5,6 +5,8 @@
 \addbibresource{references.bib}
 \usepackage{hyperref}
 \usepackage{subcaption}
+\usepackage{parskip}
+\usepackage{listings}
 
 \begin{titlepage}
     \title{Systeem en Netwerkbeheer}
@@ -187,8 +189,18 @@ Indien er al ssh-key pair bestaat van het type rsa, ecdsa of ed25519 kan deze he
 Om via een OpenSSH client te verbinden, klik in de console op de VM waarmee een verbinding moet gesloten worden, klik daarna op edit en onderaan de pagina is er een sectie genaamd \texttt{Security and Access}.
 In die sectie kan de publieke ssh key toegevoegd worden, de publieke key begint met het type daarna de key zelf en eindigt met een gebruikersnaam. 
 Zorg ervoor dat de gebruikersnaam dezelfde naam is van de gebruiker op VM.
-In een shell naar keuze op de eigen computer kan nu een verbinding gesloten worden met het volgende commando: ssh -i \texttt{<PATH\_NAAR\_PRIVATE\_KEY> <GEBRUIKERSNAAM>@<EXTERN\_IP\_ADDRESS>}.
-Indien er nog geen ssh-key pair bestaat, kan er een aangemaakt worden met het volgende commando \texttt{ssh-keygen -t <TYPE\_KEY> -f <PAD\_NAAR\_.ssh> -C <GEBRUIKERSNAAM>}.
+In een shell naar keuze op de eigen computer kan nu een verbinding gesloten worden met het volgende commando:
+
+\begin{lstlisting}[language=bash, caption={SSH verbinding}, breaklines]
+    ssh -i <PATH_NAAR_PRIVATE_KEY> <GEBRUIKERSNAAM>@<EXTERN_IP_ADDRESS>
+\end{lstlisting}
+
+Indien er nog geen ssh-key pair bestaat, kan er een aangemaakt worden met het volgende commando:
+
+\begin{lstlisting}[language=bash, caption={SSH key aanmaken}, breaklines]
+    ssh-keygen -t <TYPE_KEY> -f <PAD_NAAR_.ssh> -C <GEBRUIKERSNAAM>
+\end{lstlisting}
+
 Als de ssh verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-release} en \texttt{who} gelijkaardige resultaten als in \ref{fig:VmInstanceCatOsRelease} en \ref{fig:VmInstanceWho} moeten weergeven.
 \begin{figure}[h!]
     \centering
@@ -212,22 +224,48 @@ De tutorial heeft duidelijk gemaakt hoe VM's kunnen aangemaakt worden, maar de V
 Om de VM bruikbaar te maken wordt een mongodb cluster gehost op de VM, die door middel van een ssh tunnel bruikbaar wordt gesteld aan de buiten wereld.
 Eerst moet een nieuwe VM aangemaakt worden met de image: \texttt{Rocky Linux 10 Optimized for GCP | x86/64}. Voor de correcte keuze van de resources zie \texttt{Virtuele Machine: Configuratie}.
 Eens de VM aangemaakt is moet een ssh verbinding gemaakt worden op basis van een zelf toegevoegde public key, voor meer informatie zie \texttt{Virtuele Machine: Verbinding}.
-Een goede gewoonte is om regelmatig alle packages bij te werken en zeker op een nieuw besturingssysteem. Dit kan door middel van het commando \texttt{sudo dnf update -y} gevolgd door \texttt{sudo dnf upgrade -y}.
+Een goede gewoonte is om regelmatig alle packages bij te werken en zeker op een nieuw besturingssysteem. Dit kan door middel van het commando:
+
+\begin{lstlisting}[language=bash, caption={Update packages}, breaklines]
+    sudo dnf update -y 
+    sudo dnf upgrade -y
+\end{lstlisting}
+
 Rocky Linux is een Red-Hatt gebaseerd besturingssysteem en gebruikt daarom de Dandified YUM (DNF) package manager \cite{rocky_linux_dnf}.
 MongoDB maakt initieel geen deel uit van Rocky Linux's 10 dnf repository door licentie conflicten. 
 MongoDB valt onder de Server Side Public License (SSPL) wat niet onder een Open Source Initiatief valt. Daarom is beslist om de MongoDB package te verwijderen uit de repository \cite{fedora_mongodb}.
 Deze package kan wel manueel toegevoegd worden door in de \texttt{/etc/yum.repos.d/} folder een \texttt{mongodb-org-RELEASE\_SERIES.repo} bestand aan te maken \cite{redswitches_mongodb} \cite{atlantic_mongodb}. De volledige tutorial is \href{https://www.atlantic.net/dedicated-server-hosting/how-to-install-and-use-mongodb-on-rocky-linux-10/}{hier} te vinden.
-Nu kan de package geïnstalleerd worden met het commando \texttt{sudo dnf install mongodb-org}.
-Nadat de package geïnstalleerd is moet de service opgestart worden met het commando \texttt{sudo systemctl start mongod.service}.
-Indien de service automatisch moet opstarten als de VM opstart, moet de service ook geënabled worden. Dit kan met het commando \texttt{sudo systemctl enable mongod.service}.
+Nu kan de package geïnstalleerd worden met het commando: 
+
+\begin{lstlisting}[language=bash, caption={MongoDB package installeren}, breaklines]
+    sudo dnf install mongodb-org
+\end{lstlisting}
+
+Nadat de package geïnstalleerd is moet de service opgestart worden met het commando:
+\begin{lstlisting}[language=bash, caption={MongoDB service opstarten}, breaklines]
+    sudo systemctl start mongod.service
+\end{lstlisting}
+
+Indien de service automatisch moet opstarten als de VM opstart, moet de service ook geënabled worden. Dit kan met het commando: 
+\begin{lstlisting}[language=bash, caption={MongoDB service automatisch opstarten}, breaklines]
+    sudo systemctl enable mongod.service
+\end{lstlisting}
 
 \subsection{SSH Tunnel}
-De service die verantwoordelijk is voor ssh-connecties zou by default al moeten lopen, om te dit te controleren voer het volgende commando uit \texttt{sudo systemctl status sshd}.
-Om de ssh tunnel te openen wordt het volgende commando gebruikt \texttt{ssh -N -L POORT:HOST:HOSTPOORT GEBRUIKERSNAAM@EXTERN\_IP\_ADRESS}.
+De service die verantwoordelijk is voor ssh-connecties zou by default al moeten lopen, om te dit te controleren voer het volgende commando uit:
+
+\begin{lstlisting}[language=bash, caption={SSH service status}, breaklines]
+    sudo systemctl status sshd
+\end{lstlisting}
+
+Om de ssh tunnel te openen wordt het volgende commando gebruikt:
+\begin{lstlisting}[language=bash, caption={SSH tunnel openen}, breaklines]
+    ssh -N -L <POORT:HOST:HOSTPOORT> <GEBRUIKERSNAAM>@<EXTERN_IP_ADRESS>
+\end{lstlisting}
 De \texttt{-N} optie vertelt de ssh verbinding om geen remote commando's uit te voeren, dit zijn commando's die worden uitgevoerd op de VM.
 De \texttt{-L} optie wordt gebruikt voor port forwardings, in het commando wordt alle data op poort \texttt{POORT} geforward naar de host met ip adres \texttt{HOST} op poort \texttt{HOSTPOORT}.
-Dit geldt ook in de omgekeerde richting.
-Als bij het uitvoeren van het commando bv. \texttt{ssh -N -L 8080:127.0.0.1:27017 thomas\_vanhecke@34.76.154.33} geen foutmelding gegenereerd wordt is de tunnel succesvol aangemaakt.
+Dit geldt ook in de omgekeerde richting. Een ssh-tunnel kan er als volgt uit zien: \texttt{ssh -N -L 8080:127.0.0.1:27017 thomas\_vanhecke@34.76.154.33}.
+Als bij het uitvoeren van het commando geen foutmelding gegenereerd wordt is de tunnel succesvol aangemaakt.
 Dan kan een GUI zoals MongoDB Compass gebruikt worden om te interageren met de cluster. 
 De GUI moet volgens het voorbeeld luisteren op poort 8080 van host 127.0.0.1 ookwel localhost genoemd (eigen computer).
 Nu kan met de database geïnterageerd worden vanaf de eigen computer.
