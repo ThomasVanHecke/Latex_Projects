@@ -3,12 +3,27 @@
 \usepackage{graphicx}
 \usepackage{biblatex}
 \addbibresource{references.bib}
-\usepackage{hyperref}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=black]{hyperref}
 \usepackage{subcaption}
 \usepackage{parskip}
 \usepackage{listings}
 \usepackage{float}
 \usepackage{wrapfig}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{microtype}
+
+\lstset{
+    basicstyle=\ttfamily\small, % Use a typewriter font and slightly smaller size
+    numbers=left,               % Line numbers on the left
+    numberstyle=\tiny,          % Small line numbers
+    frame=single,               % Frame around the code
+    breaklines=true,            % Break long lines automatically
+    backgroundcolor=\color{gray!10}, % Light gray background
+    keywordstyle=\color{blue},  % Color for keywords
+    stringstyle=\color{red},    % Color for strings
+    commentstyle=\color{green!60!black} % Color for comments
+}
 
 \input{acronyms.tex}
 \makeglossaries
@@ -37,7 +52,7 @@ De cloud is een verzameling van computermiddelen \cite{azure_cloud_def}.
 Enerzijds wordt er opslagruimte aangeboden zoals OneDrive van Microsoft, anderzijds worden er ook diensten aangeboden zoals extra rekenkracht en databases.
 Om deze computermiddelen aan te vragen bestaat er een online platform zoals het Google Cloud Platform \ref{fig:GoogleCloudPlatform}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \includegraphics[width=\linewidth]{Images/GoogleCloudPlatform.png}
     \caption{Google Cloud Platform}
     \label{fig:GoogleCloudPlatform}
@@ -57,7 +72,7 @@ Wanneer alle \gls{vm}'s ook wel instances (entiteiten) genoemd, moeten opgelijst
 Deze methode maakt onderliggend een HTTP GET request naar \url{https://compute.googleapis.com/compute/v1/projects/{project}/aggregated/instances}.
 Dit is maar één method, in realiteit worden er tientallen gemaakt.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \includegraphics[width=\linewidth]{Images/ComputeEngineApiBarChart.png}
     \caption{Compute Engine API Bar Chart}
     \label{fig:ComputeEngineApiBarChart}
@@ -206,7 +221,7 @@ Indien er nog geen ssh-key pair bestaat, kan er een aangemaakt worden met het vo
 \end{lstlisting}
 
 Als de ssh-verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-release} en \texttt{who} gelijkaardige resultaten als in \ref{fig:VmInstanceCatOsRelease} en \ref{fig:VmInstanceWho} moeten weergeven.
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{subfigure}{\linewidth}
         \includegraphics[width=\linewidth]{Images/VmInstanceCatOsRelease.png}
@@ -214,7 +229,7 @@ Als de ssh-verbinding geslaagd is zouden de commando's \texttt{cat /etc/os-relea
         \label{fig:VmInstanceCatOsRelease}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[][][]{\linewidth}
+    \begin{subfigure}{\linewidth}
         \includegraphics[width=\linewidth]{Images/VmInstanceWho.png}
         \caption{Commando who}
         \label{fig:VmInstanceWho}
@@ -275,9 +290,9 @@ Als bij het uitvoeren van het commando geen foutmelding gegenereerd wordt is de 
 Daarna kan een GUI zoals MongoDB Compass gebruikt worden om te interageren met de cluster. 
 De GUI moet volgens het voorbeeld luisteren op poort 8080 van host 127.0.0.1, ook wel localhost genoemd (eigen computer).
 Nu kan met de database geïnterageerd worden vanaf de eigen computer.
-MongoDB Compass biedt ook de mogelijkheid om zelf een ssh-tunnel aan te maken, daardoor is er geen nood aan een aparte shell die deze tunnel onderhoudt.
+MongoDB Compass biedt ook de mogelijkheid om zelf een ssh-tunnel aan te maken, daardoor is er geen nood aan een aparte shell die deze tunnel onderhoudt \ref{fig:MongoDbCompassSshTunnel}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{Images/MongoDbCompassSshTunnel.png}
     \caption{MongoDB Compass SSH-Tunnel}
@@ -288,7 +303,7 @@ Als de \gls{vm} opnieuw opgestart wordt, bestaat er een kans dat de ssh-hostname
 Als test is het interessant om een nieuwe database aan te maken, een nieuwe collectie en een document toe te voegen aan de nieuwe connectie. 
 In \ref{fig:MongoDbCompassDbColDoc} is het resultaat van de test zichtbaar met een compass ssh-tunnel alsook een tunnel in een externe shell.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \includegraphics[width=\linewidth]{Images/MongoDbCompassDbColDoc.png}
     \caption{MongoDB Compass Test Connection}
     \label{fig:MongoDbCompassDbColDoc}
